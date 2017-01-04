@@ -53,7 +53,7 @@ def cozmo_program(robot: cozmo.robot.Robot):
     mySocket.connect((host,port))
     
     while True:
-      message = "ref"
+      message = "req joy left"
       mySocket.send(message.encode())
       data = mySocket.recv(1024).decode()
 #      robot.say_text(data).wait_for_completed()
@@ -89,28 +89,6 @@ def cozmo_program(robot: cozmo.robot.Robot):
         robot.drive_wheels(wl, wr)
       time.sleep(0.1)
     
-    # Tell the head motor to start lowering the head (at 5 radians per second)
-    robot.move_head(-5)
-    # Tell the lift motor to start lowering the lift (at 5 radians per second)
-    robot.move_lift(5)
-    # Tell Cozmo to drive the left wheel at 25 mmps (millimeters per second),
-    # and the right wheel at 50 mmps (so Cozmo will drive Forwards while also
-    # turning to the left
-#    robot.drive_wheels(25, 50)
-
-    # wait for 3 seconds (the head, lift and wheels will move while we wait)
-    time.sleep(3)
-
-    # Tell the head motor to start raising the head (at 5 radians per second)
-    robot.move_head(5)
-    # Tell the lift motor to start raising the lift (at 5 radians per second)
-    robot.move_lift(-5)
-    # Tell Cozmo to drive the left wheel at 50 mmps (millimeters per second),
-    # and the right wheel at -50 mmps (so Cozmo will turn in-place to the right)
-#    robot.drive_wheels(50, -50)
-
-    # wait for 3 seconds (the head, lift and wheels will move while we wait)
-    time.sleep(3)
 
 
 cozmo.run_program(cozmo_program)
