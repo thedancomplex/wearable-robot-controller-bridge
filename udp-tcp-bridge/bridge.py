@@ -66,6 +66,10 @@ def clientthread(conn):
                   sendJoystick(conn, message_left, joy_left_x, joy_left_y)
                 if ds[2] == message_right:
                   sendJoystick(conn, message_right, joy_right_x, joy_right_y)
+            if ds[1] == message_heart:
+              if len(ds) >=3:
+                if ds[2] == message_rate:
+                  sendHeartRate(conn)
                   
         ##conn.sendall(robot_message)
         #conn.sendall(reply)
@@ -75,6 +79,9 @@ def clientthread(conn):
  
 #now keep talking with the client
 
+def sendHeartRate(conn):
+  reply = mesasge_rep + ' ' + message_rate + ' ' + str(heart_rate)
+  conn.sendall(reply)
 
 def sendJoystick(conn, stick, x, y):
   reply = message_rep + ' ' + message_joy + ' ' + stick + ' ' + str(x) + ' ' + str(y)
