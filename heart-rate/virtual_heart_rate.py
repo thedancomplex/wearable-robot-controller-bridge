@@ -47,7 +47,7 @@ sock.sendto(MESSAGE.encode(), (UDP_IP, UDP_PORT))
 
 while True:
     host = "104.131.47.73"
-    port = 8889
+    port = 8890
      
     mySocket = socket.socket()
     mySocket.connect((host,port))
