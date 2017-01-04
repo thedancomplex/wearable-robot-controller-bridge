@@ -27,7 +27,7 @@ message_rep = 'rep'
 
  
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-print 'Socket created'
+print 'Socket created - joy'
  
 #Bind socket to local host and port
 try:
@@ -36,11 +36,11 @@ except socket.error as msg:
     print 'Bind failed. Error Code : ' + str(msg[0]) + ' Message ' + msg[1]
     sys.exit()
      
-print 'Socket bind complete'
+print 'Socket bind complete - joy'
  
 #Start listening on socket
 s.listen(10)
-print 'Socket now listening'
+print 'Socket now listening - joy'
 
 
 
@@ -49,7 +49,7 @@ print 'Socket now listening'
 
 
 sh = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-print 'Socket created'
+print 'Socket created - heart'
  
 #Bind socket to local host and port
 try:
@@ -58,7 +58,7 @@ except socket.error as msg:
     print 'Bind failed. Error Code : ' + str(msg[0]) + ' Message ' + msg[1]
     sys.exit()
      
-print 'Socket bind complete'
+print 'Socket bind complete - heart'
  
 #Start listening on socket
 sh.listen(10)
