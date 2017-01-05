@@ -3,7 +3,7 @@ import sys
 from thread import *
  
 HOST = ''   # Symbolic name meaning all available interfaces
-PORT = 8890 # Arbitrary non-privileged port
+PORT = 8889 # Arbitrary non-privileged port
 
 
 robot_message = "none"
@@ -87,7 +87,7 @@ def clientthread(conn):
 #now keep talking with the client
 
 def sendHeartRate(conn):
-  reply = mesasge_rep + ' ' + message_rate + ' ' + str(heart_rate)
+  reply = messasge_rep + ' ' + message_rate + ' ' + str(heart_rate)
   conn.sendall(reply)
 
 def sendJoystick(conn, stick, x, y):
