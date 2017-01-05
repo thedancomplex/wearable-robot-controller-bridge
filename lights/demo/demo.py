@@ -10,7 +10,7 @@ table = 5
 
 the_max = 255
 the_min = 0
-T = 1.0
+T = 2.0
 
 while True:
   b.set_light(bed_left,  'bri', the_max)
