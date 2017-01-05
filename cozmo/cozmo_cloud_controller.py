@@ -69,8 +69,8 @@ def cozmo_program(robot: cozmo.robot.Robot):
 #          robot.say_text(data_split[2]).wait_for_completed()
       if len(data_split) > 3:
         k = 100.0
-        x = -float(data_split[2])
-        y = float(data_split[3])
+        x = -float(data_split[3])
+        y = float(data_split[4])
     
         wl = k*y
         wr = k*y 

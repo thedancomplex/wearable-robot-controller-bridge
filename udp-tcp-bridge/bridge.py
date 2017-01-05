@@ -87,7 +87,7 @@ def clientthread(conn):
 #now keep talking with the client
 
 def sendHeartRate(conn):
-  reply = mesasge_rep + ' ' + message_rate + ' ' + str(heart_rate)
+  reply = messasge_rep + ' ' + message_rate + ' ' + str(heart_rate)
   conn.sendall(reply)
 
 def sendJoystick(conn, stick, x, y):
