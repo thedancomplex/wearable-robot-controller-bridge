@@ -1,11 +1,15 @@
+#!/usr/bin/env python
 from phue import Bridge
 import numpy as np
 
 import socket
 import time
 b = Bridge('192.168.0.105')
+time.sleep(1.0)
 b.connect()
+time.sleep(1.0)
 b.get_api()
+time.sleep(1.0)
 
 bed_left = 3
 bed_right = 4
