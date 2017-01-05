@@ -1,10 +1,11 @@
 import socket
 import sys
 from thread import *
+import time
  
 HOST = ''   # Symbolic name meaning all available interfaces
 PORT = 8889 # Arbitrary non-privileged port
-
+PORT_HEART = 8890 # heart rate port
 
 robot_message = "none"
 
@@ -23,46 +24,45 @@ message_rate = 'rate'
 message_req = 'req'
 message_rep = 'rep'
 
-
-
- 
-s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-print 'Socket created - joy'
- 
-#Bind socket to local host and port
-try:
-    s.bind((HOST, PORT))
-except socket.error as msg:
+def connectTCP(soc, the_port):
+  print 'Socket created'
+  #Bind socket to local host and port
+  try:
+    soc.bind((HOST, the_port))
+  except socket.error as msg:
     print 'Bind failed. Error Code : ' + str(msg[0]) + ' Message ' + msg[1]
     sys.exit()
      
-print 'Socket bind complete - joy'
+  print 'Socket bind complete'
  
-#Start listening on socket
-s.listen(10)
-print 'Socket now listening - joy'
+  #Start listening on socket
+  soc.listen(10)
+  print 'Socket now listening'
+  return soc
 
+ 
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+s_heart = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-
-
+s = connectTCP(s, PORT)
+s_heart = connectTCP(s_heart, PORT_HEART)
 
 
  
 #Function for handling connections. This will be used to create threads
 def clientthread(conn):
-    start_new_thread(udpClientThread ,(conn,))
-    #Sending message to connected client
-###    conn.send('Welcome to the server. Type something and hit enter\n') #send only takes string
-     
+    try:
+      start_new_thread(udpClientThread ,(conn,))
     #infinite loop so that function do not terminate and thread do not end.
-    while True:
+      print "TCP Read"
+      while True:
          
         #Receiving from client
         data = conn.recv(1024)
-        reply = 'ref ' + str(0.123) + " " + str(0.456)
-        print reply
+#        reply = 'ref ' + str(0.123) + " " + str(0.456)
         if not data: 
             break
+        print data
         
         ds = data.split(" ")
         if len(ds) > 0:
@@ -80,6 +80,8 @@ def clientthread(conn):
                   
         ##conn.sendall(robot_message)
         #conn.sendall(reply)
+    except:
+      print 'UDP already running'
      
     #came out of loop
     conn.close()
@@ -87,7 +89,7 @@ def clientthread(conn):
 #now keep talking with the client
 
 def sendHeartRate(conn):
-  reply = messasge_rep + ' ' + message_rate + ' ' + str(heart_rate)
+  reply = message_rep + ' ' + message_rate + ' ' + str(heart_rate)
   conn.sendall(reply)
 
 def sendJoystick(conn, stick, x, y):
@@ -95,6 +97,7 @@ def sendJoystick(conn, stick, x, y):
   conn.sendall(reply)
 
 def udpClientThread(conn):
+ try:
   global robot_message
   global joy_left_x
   global joy_left_y
@@ -130,10 +133,12 @@ def udpClientThread(conn):
               joy_right_x = float(ds[2])
               joy_right_y = float(ds[3])              
       print "received message:", data
-      
+ except:
+  print "Can not connect to UDP, port already open" 
 
 
 def joyThread():
+  print 'enter joy'
   while 1:
     #wait to accept a connection - blocking call
     conn, addr = s.accept()
@@ -142,6 +147,26 @@ def joyThread():
     
     #start new thread takes 1st argument as a function name to be run, second is the tuple of arguments to the function.
     start_new_thread(clientthread ,(conn,))
+  print 'exit joy'
   s.close()
 
-joyThread()
+def heartThread():
+  print 'enter heart'
+  while 1:
+    #wait to accept a connection - blocking call
+    conn_heart, addr = s_heart.accept()
+    
+    print 'Connected with ' + addr[0] + ':' + str(addr[1])
+    
+    #start new thread takes 1st argument as a function name to be run, second is the tuple of arguments to the function.
+    start_new_thread(clientthread ,(conn_heart,))
+  print 'exit heart'
+  s_heart.close()
+
+print 'start threads'
+start_new_thread(heartThread ,())
+print 'start threads'
+start_new_thread(joyThread ,())
+
+while True:
+  time.sleep(1)
